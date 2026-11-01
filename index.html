@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Aplikasi Audio Pertama Saya</title>
+</head>
+<body>
+    <h1>Halo, ini aplikasi audio saya!</h1>
+    <button onclick="putarNada()">Klik untuk memutar Nada</button>
+
+    <script>
+        function putarNada() {
+            // Membuat Audio Context (inti dari pemrosesan audio di web)
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioCtx.createOscillator();
+            
+            oscillator.type = 'sine'; // Jenis gelombang
+            oscillator.frequency.setValueAtTime(440, audioCtx.currentTime); // Nada A (440Hz)
+            
+            oscillator.connect(audioCtx.destination);
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + 1); // Berhenti setelah 1 detik
+        }
+    </script>
+</body>
+</html>
