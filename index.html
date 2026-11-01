@@ -9,44 +9,33 @@
     <input type="file" id="fileInput" accept="audio/*">
     <br><br>
     <audio id="audioPlayer" controls></audio>
-    <p id="status" style="color: green; font-weight: bold;"></p>
 
     <script>
         const fileInput = document.getElementById('fileInput');
         const audioPlayer = document.getElementById('audioPlayer');
-        const statusText = document.getElementById('status');
         let audioCtx;
         let sourceNode;
 
-        // Inisialisasi AudioContext saat pengguna memilih file (mencegah error browser)
         function initAudio() {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 
-                // 1. Ambil sumber audio dari tag <audio>
                 sourceNode = audioCtx.createMediaElementSource(audioPlayer);
 
-                // 2. Buat Notch Filter untuk memotong frekuensi tinggi (Watermark AI)
                 const filter = audioCtx.createBiquadFilter();
                 filter.type = 'notch';
-                filter.frequency.value = 19500; // Target frekuensi watermark umum (19.5 kHz)
-                filter.Q.value = 30; // Lebar pita pemotongan
+                filter.frequency.value = 19500; 
+                filter.Q.value = 30; 
 
-                // 3. Hubungkan alur audio: Source -> Filter -> Speaker
                 sourceNode.connect(filter);
                 filter.connect(audioCtx.destination);
-                
-                statusText.innerText = "Filter AI Watermark Aktif (19.5 kHz dipotong)";
             }
         }
 
         fileInput.addEventListener('change', function(event) {
             const file = event.target.files[0];
             if (file) {
-                // Aktifkan AudioContext & Filter
                 initAudio(); 
-                
-                // Muat dan mainkan lagu
                 const fileURL = URL.createObjectURL(file);
                 audioPlayer.src = fileURL;
                 audioPlayer.play(); 
