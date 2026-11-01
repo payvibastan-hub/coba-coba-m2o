@@ -1,25 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Aplikasi Audio Pertama Saya</title>
+    <title>Pemutar Musik Saya</title>
 </head>
-<body>
-    <h1>Halo, ini aplikasi audio saya!</h1>
-    <button onclick="putarNada()">Klik untuk memutar Nada</button>
+<body style="text-align: center; margin-top: 50px; font-family: sans-serif;">
+    <h1>Aplikasi Pemutar Musik</h1>
+    <p>Pilih file MP3 dari komputer Anda:</p>
+    <input type="file" id="fileInput" accept="audio/*">
+    <br><br>
+    <audio id="audioPlayer" controls></audio>
 
     <script>
-        function putarNada() {
-            // Membuat Audio Context (inti dari pemrosesan audio di web)
-            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioCtx.createOscillator();
-            
-            oscillator.type = 'sine'; // Jenis gelombang
-            oscillator.frequency.setValueAtTime(440, audioCtx.currentTime); // Nada A (440Hz)
-            
-            oscillator.connect(audioCtx.destination);
-            oscillator.start();
-            oscillator.stop(audioCtx.currentTime + 1); // Berhenti setelah 1 detik
-        }
+        const fileInput = document.getElementById('fileInput');
+        const audioPlayer = document.getElementById('audioPlayer');
+
+        fileInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const fileURL = URL.createObjectURL(file);
+                audioPlayer.src = fileURL;
+                audioPlayer.play(); // Otomatis mainkan
+            }
+        });
     </script>
 </body>
 </html>
